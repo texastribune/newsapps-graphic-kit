@@ -1,0 +1,72 @@
+$sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$serif: Georgia, "Times New Roman", Times, serif;
+
+body {
+  color: $bodytext-black;
+  font-family: $sans-serif;
+  line-height: 1.4;
+}
+
+a {
+  color: $href-teal;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.header {
+  margin: 0 0 .625em; // 10px
+
+  h1 {
+    font-size: 1.375em; // 22px
+    font-weight: 300;
+    line-height: 1.4;
+    margin: 0;
+  }
+}
+
+.prose {
+  margin: 0 0 .625em; // 10px
+
+  p {
+    color: lighten($bodytext-black, 25%);
+    font-family: $serif;
+    font-size: .875em; // 14px
+    line-height: 1.4;
+    margin: 0 0 .714285714em; // 10px
+
+    &:last-child {
+      margin: 0;
+    }
+  }
+}
+
+.graphic {
+  @include clearfix;
+  margin: 0 0 1.875em; // 30px
+}
+
+.subhead {
+  margin: 0 0 .625em;
+
+  h2 {
+    font-size: 1em;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0;
+  }
+}
+
+.footer {
+  @include clearfix;
+  color: lighten($bodytext-black, 45%);
+  font-size: .75em; // 12px
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "newsapps-graphics-kit",
+  "private": true,
+  "devDependencies": {
+  "newsapps-styles": "texastribune/newsapps-styles#0.8.1"
+  }
+}

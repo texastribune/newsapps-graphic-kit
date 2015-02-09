@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{ META.graphic_title }} | The Texas Tribune</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- build:css styles/main.min.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+</head>
+<body>
+
+<div class="header">
+  <h1>{{ META.graphic_title }}</h1>
+</div>
+
+<div class="prose">
+  {{ META.prose }}
+</div>
+
+<div id="graphic" class="graphic">
+
+<!-- Add your HTML here! -->
+
+</div>
+
+<div class="footer">
+  <ul>
+    {% if META.source %}<li>Source: {% if META.source_url %}<a href="{{ META. source_url }}">{{ META.source }}</a>{% else %}{{ META.source }}{% endif %}</li>{% endif %}
+    {% if META.credit %}<li>Credit: {{ META.credit }}</li>{% endif %}
+  </ul>
+</div>
+
+<!-- build:js scripts/main.min.js -->
+<script src="/node_modules/pym.js/dist/pym.js"></script>
+<script src="scripts/main.js"></script>
+<!-- endbuild -->
+</body>
+</html>

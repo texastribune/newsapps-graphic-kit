@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Embed Preview</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    pre {
+      font-size: .875em;
+    }
+  </style>
+</head>
+<body>
+
+<div class="subhead">
+  <h2>320px preview</h2>
+</div>
+<div id="preview-320" style="width: 320px; border: 1px dashed rgb(211, 211, 211); margin: 0 0 1em;"></div>
+
+<div class="subhead">
+  <h2>640px preview</h2>
+</div>
+<div id="preview-640" style="width: 640px; border: 1px dashed rgb(211, 211, 211); margin: 0 0 1em;"></div>
+
+<div class="subhead">
+  <h2>HTML embed</h2>
+</div>
+<pre>
+  &lt;div id="pym-graphic">&amp;nbsp;&lt;/div>
+</pre>
+
+<div class="subhead">
+  <h2>Pym loader embed</h2>
+</div>
+
+<pre>
+  &lt;script src="//s3.amazonaws.com/{{ INTERNAL.s3_bucket }}/graphics/{{ INTERNAL.slug }}/scripts/pym/pym.min.js">&lt;/script>
+  &lt;script>
+    var url = '//s3.amazonaws.com/{{ INTERNAL.s3_bucket }}/graphics/{{ INTERNAL.slug }}/index.html';
+    var pymParent = new pym.Parent('pym-graphic', url, {});
+  &lt;/script>
+</pre>
+
+<script src="/node_modules/pym.js/src/pym.js"></script>
+<script>
+/* global pym */
+(function() {
+  'use strict';
+
+  new pym.Parent('preview-320', '../index.html', {});
+  new pym.Parent('preview-640', '../index.html', {});
+})();
+
+</script>
+</body>
+</html>
