@@ -1,6 +1,6 @@
-# News Apps Graphics Kit
+# News Apps Graphic Kit
 
-The News Apps Graphics Kit is a boilerplate for embeddable graphic. It was built to suit the needs of the Texas Tribune's [News Apps](https://twitter.com/newsapps) team, but could easily be altered to cater to other organization's/individual's needs.
+The News Apps Graphic Kit is a boilerplate for embeddable graphics. It was built for the Texas Tribune's [News Apps](https://twitter.com/newsapps) team, but could easily be altered to cater to other organization's/individual's needs.
 
 ## Features
 
