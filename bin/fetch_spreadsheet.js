@@ -55,7 +55,7 @@ function primeToken(client, cb) {
 }
 
 function keyValueProcessor(worksheet) {
-  var temp = {};
+  var data = {};
 
   for (var cell in worksheet) {
     if (cell[0] === '!') { continue; }
@@ -75,15 +75,31 @@ function keyValueProcessor(worksheet) {
         bCell = marked(bCell);
       }
 
-      temp[aCell] = bCell;
+      data[aCell] = bCell;
     }
   }
 
-  return temp;
+  return data;
 }
 
 function objectListProcessor(worksheet) {
-  return XLSX.utils.sheet_to_json(worksheet, {raw: true});
+  var data =  XLSX.utils.sheet_to_json(worksheet, {raw: true});
+
+  var mdColumns = Object.keys(data[0]).filter(function(k) {
+    return k.toLowerCase().slice(-3) === '_md';
+  });
+
+  if (mdColumns) {
+    data.forEach(function(d) {
+      mdColumns.forEach(function(c) {
+        if (d.hasOwnProperty(c)) {
+          d[c] = marked(d[c]);
+        }
+      });
+    });
+  }
+
+  return data;
 }
 
 function buildDataJSON(data) {
