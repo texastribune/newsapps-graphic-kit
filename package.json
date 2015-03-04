@@ -2,7 +2,7 @@
   "private": true,
   "config": {
     "s3_bucket": "graphics.texastribune.org",
-    "slug": ""
+    "slug": "tx-city-ten-years"
   },
   "devDependencies": {
     "browser-sync": "^2.0.0-rc10",

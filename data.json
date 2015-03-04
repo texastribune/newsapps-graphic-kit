@@ -1,1 +1,12 @@
-{}
+{
+  "timeline": [
+    {
+      "Start Date": 38434,
+      "Headline": "Explosion at Texas City Refinery",
+      "Text": "This is some text, blah blah blah. This is some more text blah blah blah blah blah",
+      "Media": "http://blog.chron.com/lorensteffy/files/2012/07/bp-texas-city.jpg",
+      "Media Credit": "Brett Coomer/Houston Chronicle",
+      "Media Caption": "Aerial shot of the refinery after the 2005 explosion"
+    }
+  ]
+}
