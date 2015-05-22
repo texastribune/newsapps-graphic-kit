@@ -24,6 +24,29 @@ The News Apps Graphic Kit is a boilerplate for embeddable graphics. It was built
 4. Add your Google sheet's ID to the `config.json`, and override any sheets that need to be processed differently. (`keyvalue` or `objectlist`)
 5. Get to work!
 
+## Connect to S3
+
+To use the commands to deploy your project to Amazon S3, you'll need to add a [profile newsapps] to ~/.aws/config. It should look something like this:
+
+```
+[profile newsapps]
+aws_access_key_id=YOUR_UNIQUE_ID
+aws_secret_access_key=YOUR_SECRET_ACCESS_KEY
+```
+
+Then you can run these commands to build and deploy:
+
+```
+gulp
+npm run deploy
+```
+
+The package will deploy to graphics.texastribune.org/donor-wall. To change the location, update the package.json file.
+
+## Assets
+
+The graphics kit comes with an empty app/assets folder for you to store images, fonts and data files. The kit works best if you add these files to app/assets/images, app/assets/fonts and app/assets/data. These files will automatically be ignored by git hub, if added to the proper folders, to prevent a storage overload and to keep files locally that may have sensitive information in an open source project.
+
 *[Yeoman](http://yeoman.io/) is being considered.*
 
 ## Available Commands

@@ -1,6 +1,8 @@
 .sass-cache
 .tmp
-app/assets
+app/assets/images
+app/assets/fonts
+app/assets/data
 bower_components
 dist
 node_modules
