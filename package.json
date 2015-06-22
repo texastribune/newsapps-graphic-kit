@@ -7,7 +7,7 @@
   "devDependencies": {
     "browser-sync": "^2.2.4",
     "chalk": "^0.5.1",
-    "del": "^1.1.1",
+    "del": "^1.2.0",
     "googleapis": "^1.1.2",
     "gulp": "^3.8.10",
     "gulp-autoprefixer": "^2.1.0",
