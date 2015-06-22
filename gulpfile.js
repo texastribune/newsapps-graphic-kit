@@ -4,17 +4,13 @@
 var fs = require('fs');
 
 var gulp = require('gulp');
-var $ = require('gulp-load-plugins')({
-  rename: {
-    'gulp-ruby-sass': 'sass',
-    'gulp-nunjucks-render': 'nunjucks'
-  }
-});
+var $ = require('gulp-load-plugins')();
 var del = require('del');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 
 var reload = browserSync.reload;
+var stream = browserSync.stream;
 
 gulp.task('jshint', function() {
   return gulp.src(['app/scripts/**/*.js', '!app/scripts/libs/*'])
@@ -23,20 +19,19 @@ gulp.task('jshint', function() {
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
 
-gulp.task('styles', function () {
-  return $.sass('app/styles/', {
-    loadPath: ['.'],
-    precision: 10,
-    sourcemap: true
-  })
-  .on('error', function(err) {
-    console.error('Error', err.message);
-  })
-  .pipe($.autoprefixer({browsers: ['last 2 versions', 'IE 9', 'IE 8']}))
-  .pipe($.sourcemaps.write())
-  .pipe(gulp.dest('.tmp/styles'))
-  .pipe($.if('*.css', reload({stream: true})))
-  .pipe($.size({title: 'styles'}));
+gulp.task('styles', function() {
+  return gulp.src('app/**/*.scss')
+    .pipe($.sass({
+      precision: 10,
+      onError: console.error.bind(console, 'Sass error: ')
+    }))
+    .pipe($.autoprefixer(['last 2 versions', 'IE 9', 'IE 8']))
+    .pipe(gulp.dest('.tmp'))
+    .pipe(stream({match: '**/*.css'}))
+    .pipe($.if('*.css', $.csso()))
+    .pipe($.gzip({append: false}))
+    .pipe(gulp.dest('dist'))
+    .pipe($.size({title: 'styles'}));
 });
 
 gulp.task('templates', function() {
@@ -94,8 +89,8 @@ gulp.task('html', ['templates'], function() {
     .pipe($.size({title: 'html'}));
 });
 
-gulp.task('clean', function() {
-  del(['.tmp', 'dist/*', '!dist/.git'], {dot: true});
+gulp.task('clean', function(cb) {
+  return del(['.tmp/**', 'dist/**', '!dist/.git'], {dot: true}, cb);
 });
 
 gulp.task('pym', function() {
@@ -119,7 +114,7 @@ gulp.task('serve', ['styles', 'templates'], function() {
 
   gulp.watch(['app/**/*.html'], ['templates', reload]);
   gulp.watch(['data.json'], ['templates', reload]);
-  gulp.watch(['app/styles/**/*.scss'], ['styles', reload]);
+  gulp.watch(['app/styles/**/*.scss'], ['styles']);
   gulp.watch(['app/scripts/**/*.js'], ['jshint', reload]);
   gulp.watch(['app/images/**/*'], reload);
   gulp.watch(['app/fonts/**/*'], reload);
