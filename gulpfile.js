@@ -22,20 +22,19 @@ gulp.task('jshint', function() {
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
 
-gulp.task('styles', function () {
-  return $.sass('app/styles/', {
-    loadPath: ['.'],
-    precision: 10,
-    sourcemap: true
-  })
-  .on('error', function(err) {
-    console.error('Error', err.message);
-  })
-  .pipe($.autoprefixer({browsers: ['last 2 versions', 'IE 9', 'IE 8']}))
-  .pipe($.sourcemaps.write())
-  .pipe(gulp.dest('.tmp/styles'))
-  .pipe($.if('*.css', reload({stream: true})))
-  .pipe($.size({title: 'styles'}));
+gulp.task('styles', function() {
+  return gulp.src('app/**/*.scss')
+    .pipe($.sass({
+      precision: 10,
+      onError: console.error.bind(console, 'Sass error: ')
+    }))
+    .pipe($.autoprefixer(['last 2 versions', 'IE 9', 'IE 8']))
+    .pipe(gulp.dest('.tmp'))
+    .pipe(stream({match: '**/*.css'}))
+    .pipe($.if('*.css', $.csso()))
+    .pipe($.gzip({append: false}))
+    .pipe(gulp.dest('dist'))
+    .pipe($.size({title: 'styles'}));
 });
 
 gulp.task('templates', function() {
