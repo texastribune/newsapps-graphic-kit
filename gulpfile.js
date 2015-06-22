@@ -4,11 +4,7 @@
 var fs = require('fs');
 
 var gulp = require('gulp');
-var $ = require('gulp-load-plugins')({
-  rename: {
-    'gulp-nunjucks-render': 'nunjucks'
-  }
-});
+var $ = require('gulp-load-plugins')();
 var del = require('del');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
