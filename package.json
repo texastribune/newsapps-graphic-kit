@@ -38,7 +38,7 @@
     "xlsx": "^0.7.12"
   },
   "dependencies": {
-    "newsapps-styles": "^1.0.1",
+    "newsapps-styles": "^1.1.0",
     "pym.js": "^0.4.3"
   },
   "scripts": {
