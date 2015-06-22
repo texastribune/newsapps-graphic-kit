@@ -114,7 +114,7 @@ gulp.task('serve', ['styles', 'templates'], function() {
 
   gulp.watch(['app/**/*.html'], ['templates', reload]);
   gulp.watch(['data.json'], ['templates', reload]);
-  gulp.watch(['app/styles/**/*.scss'], ['styles', reload]);
+  gulp.watch(['app/styles/**/*.scss'], ['styles']);
   gulp.watch(['app/scripts/**/*.js'], ['jshint', reload]);
   gulp.watch(['app/images/**/*'], reload);
   gulp.watch(['app/fonts/**/*'], reload);
