@@ -6,7 +6,6 @@ var fs = require('fs');
 var gulp = require('gulp');
 var $ = require('gulp-load-plugins')({
   rename: {
-    'gulp-ruby-sass': 'sass',
     'gulp-nunjucks-render': 'nunjucks'
   }
 });
