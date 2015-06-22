@@ -14,6 +14,7 @@ var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 
 var reload = browserSync.reload;
+var stream = browserSync.stream;
 
 gulp.task('jshint', function() {
   return gulp.src(['app/scripts/**/*.js', '!app/scripts/libs/*'])
