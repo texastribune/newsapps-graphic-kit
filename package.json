@@ -38,7 +38,8 @@
     "xlsx": "^0.7.12"
   },
   "dependencies": {
-    "pym.js": "^0.4.1"
+    "newsapps-styles": "^1.0.1",
+    "pym.js": "^0.4.3"
   },
   "scripts": {
     "spreadsheet/authorize": "./bin/authorize.js",
