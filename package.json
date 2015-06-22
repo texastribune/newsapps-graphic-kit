@@ -5,7 +5,7 @@
     "slug": ""
   },
   "devDependencies": {
-    "browser-sync": "^2.2.4",
+    "browser-sync": "^2.7.12",
     "chalk": "^0.5.1",
     "del": "^1.2.0",
     "googleapis": "^1.1.2",
