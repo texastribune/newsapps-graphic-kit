@@ -89,8 +89,8 @@ gulp.task('html', ['templates'], function() {
     .pipe($.size({title: 'html'}));
 });
 
-gulp.task('clean', function() {
-  del(['.tmp', 'dist/*', '!dist/.git'], {dot: true});
+gulp.task('clean', function(cb) {
+  return del(['.tmp/**', 'dist/**', '!dist/.git'], {dot: true}, cb);
 });
 
 gulp.task('pym', function() {
