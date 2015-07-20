@@ -18,11 +18,20 @@ The News Apps Graphic Kit is a boilerplate for embeddable graphics. It was built
 
 ## Quickstart
 
-1. Download the project folder or clone the repo.
-2. `npm install && bower install`
-3. Authorize your computer if this is your first time to ever use the kit: `npm run spreadsheet/authorize`
-4. Add your Google sheet's ID to the `config.json`, and override any sheets that need to be processed differently. (`keyvalue` or `objectlist`)
-5. Get to work!
+Run this command in your project's folder:
+
+```sh
+curl -fsSL https://github.com/texastribune/newsapps-graphic-kit/archive/master.tar.gz | tar -xz --strip-components=1
+```
+
+Next, `npm install`.
+
+If this is your first time to ever use the kit, you need to authorize your computer: `npm run spreadsheet/authorize`
+
+
+Add your Google sheet's ID to the `config.json`, and override any sheets that need to be processed differently. (`keyvalue` or `objectlist`)
+
+Get to work!
 
 ## Connect to S3
 

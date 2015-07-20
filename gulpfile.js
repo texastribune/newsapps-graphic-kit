@@ -4,53 +4,57 @@
 var fs = require('fs');
 
 var gulp = require('gulp');
-var $ = require('gulp-load-plugins')({
-  rename: {
-    'gulp-ruby-sass': 'sass',
-    'gulp-nunjucks-render': 'nunjucks'
-  }
-});
+var $ = require('gulp-load-plugins')();
 var del = require('del');
 var runSequence = require('run-sequence');
 var browserSync = require('browser-sync');
 
 var reload = browserSync.reload;
+var stream = browserSync.stream;
 
 gulp.task('jshint', function() {
-  return gulp.src('app/scripts/**/*.js')
+  return gulp.src(['app/scripts/**/*.js', '!app/scripts/libs/*'])
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
 
 gulp.task('styles', function() {
-  return $.sass('app/styles/', {
-      loadPath: ['.'],
+  return gulp.src('app/**/*.scss')
+    .pipe($.sass({
       precision: 10,
-      sourcemap: true
-    })
-    .on('error', console.error.bind(console))
-    .pipe($.autoprefixer({
-      browsers: ['last 2 versions', 'IE 9', 'IE 8'],
-      cascade: false
+      onError: console.error.bind(console, 'Sass error: ')
     }))
-    .pipe($.sourcemaps.write('.'))
-    .pipe(gulp.dest('.tmp/styles'))
+    .pipe($.autoprefixer(['last 2 versions', 'IE 9', 'IE 8']))
+    .pipe(gulp.dest('.tmp'))
+    .pipe(stream({match: '**/*.css'}))
+    .pipe($.if('*.css', $.csso()))
+    .pipe($.gzip({append: false}))
+    .pipe(gulp.dest('dist'))
     .pipe($.size({title: 'styles'}));
 });
 
 gulp.task('templates', function() {
+  var nunjucks = require('nunjucks');
+  var map = require('vinyl-map');
+
   var data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
-  var packageData = JSON.parse(fs.readFileSync('package.json', 'utf8'));
 
   // pulls over the bucket and slug data for the preview page
+  var packageData = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   data.INTERNAL = packageData.config;
 
-  $.nunjucks.nunjucks.configure(['app/']);
+  // disable watching or it'll hang forever
+  nunjucks.configure('app', {watch: false});
 
-  return gulp.src(['app/**/*.html', '!app/includes/*'])
-    .pipe($.nunjucks(data))
-    .pipe(gulp.dest('.tmp'));
+  var nunjuckified = map(function(code, filename) {
+    return nunjucks.renderString(code.toString(), data);
+  });
+
+  return gulp.src(['app/**/{*,!_*}.html', '!app/**/_*.html'])
+    .pipe(nunjuckified)
+    .pipe(gulp.dest('.tmp'))
+    .pipe($.size({title: 'html'}));
 });
 
 gulp.task('images', function() {
@@ -85,8 +89,8 @@ gulp.task('html', ['templates'], function() {
     .pipe($.size({title: 'html'}));
 });
 
-gulp.task('clean', function() {
-  del(['.tmp', 'dist/*', '!dist/.git'], {dot: true});
+gulp.task('clean', function(cb) {
+  return del(['.tmp/**', 'dist/**', '!dist/.git'], {dot: true}, cb);
 });
 
 gulp.task('pym', function() {
@@ -110,7 +114,7 @@ gulp.task('serve', ['styles', 'templates'], function() {
 
   gulp.watch(['app/**/*.html'], ['templates', reload]);
   gulp.watch(['data.json'], ['templates', reload]);
-  gulp.watch(['app/styles/**/*.scss'], ['styles', reload]);
+  gulp.watch(['app/styles/**/*.scss'], ['styles']);
   gulp.watch(['app/scripts/**/*.js'], ['jshint', reload]);
   gulp.watch(['app/images/**/*'], reload);
   gulp.watch(['app/fonts/**/*'], reload);

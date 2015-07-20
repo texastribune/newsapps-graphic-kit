@@ -12,30 +12,35 @@
 </head>
 <body>
 
-<div class="header">
+<div class="graphic">
   <h1>{{ META.graphic_title }}</h1>
-</div>
+  <p class="subtext">{{ META.prose }}</p>
 
-<div class="prose">
-  {{ META.prose }}
-</div>
+  <div id="graphic-container">
 
-<div id="graphic" class="graphic">
+  <!-- Add your HTML here! -->
 
-<!-- Add your HTML here! -->
+  </div>
 
-</div>
-
-<div class="footer">
-  <ul>
-    {% if META.source %}<li>Source: {% if META.source_url %}<a href="{{ META. source_url }}">{{ META.source }}</a>{% else %}{{ META.source }}{% endif %}</li>{% endif %}
-    {% if META.credit %}<li>Credit: {{ META.credit }}</li>{% endif %}
-  </ul>
+  <div class="footer">
+    <ul>
+      {% if META.source %}<li>Source: {% if META.source_url %}<a href="{{ META. source_url }}">{{ META.source }}</a>{% else %}{{ META.source }}{% endif %}</li>{% endif %}
+      {% if META.credit %}<li>Credit: {{ META.credit }}</li>{% endif %}
+    </ul>
+  </div>
 </div>
 
 <!-- build:js scripts/main.min.js -->
 <script src="/node_modules/pym.js/dist/pym.js"></script>
 <script src="scripts/main.js"></script>
 <!-- endbuild -->
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+<script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-9827490-1', 'auto');
+  ga('set', 'location', window.location.protocol + '//' + window.location.hostname + window.location.pathname);
+  ga('set', 'page', window.location.pathname);
+  ga('send', 'pageview');
+</script>
 </body>
 </html>
