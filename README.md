@@ -56,8 +56,6 @@ The package will deploy to graphics.texastribune.org/donor-wall. To change the l
 
 The graphics kit comes with an empty app/assets folder for you to store images, fonts and data files. The kit works best if you add these files to app/assets/images, app/assets/fonts and app/assets/data. These files will automatically be ignored by git hub, if added to the proper folders, to prevent a storage overload and to keep files locally that may have sensitive information in an open source project.
 
-*[Yeoman](http://yeoman.io/) is being considered.*
-
 ## Available Commands
 
 ```sh
