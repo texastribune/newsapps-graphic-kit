@@ -2,7 +2,7 @@
   "private": true,
   "config": {
     "s3_bucket": "graphics.texastribune.org",
-    "slug": "test-bloop"
+    "slug": ""
   },
   "devDependencies": {
     "browser-sync": "^2.8.0",
