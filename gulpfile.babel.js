@@ -1,25 +1,26 @@
 /* global -$ */
 'use strict';
 
-var fs = require('fs');
+import fs from 'fs';
 
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')();
-var del = require('del');
-var runSequence = require('run-sequence');
-var browserSync = require('browser-sync');
+import gulp from 'gulp';
+import gulpLoadPlugins from 'gulp-load-plugins';
+import del from 'del';
+import runSequence from 'run-sequence';
+import browserSync from 'browser-sync';
 
-var reload = browserSync.reload;
-var stream = browserSync.stream;
+const $ = gulpLoadPlugins();
+const reload = browserSync.reload;
+const stream = browserSync.stream;
 
-gulp.task('jshint', function() {
+gulp.task('jshint', () => {
   return gulp.src(['app/scripts/**/*.js', '!app/scripts/libs/*'])
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
     .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
 });
 
-gulp.task('styles', function() {
+gulp.task('styles', () => {
   return gulp.src('app/**/*.scss')
     .pipe($.sass({
       precision: 10,
@@ -34,7 +35,7 @@ gulp.task('styles', function() {
     .pipe($.size({title: 'styles'}));
 });
 
-gulp.task('templates', function() {
+gulp.task('templates', () => {
   var nunjucks = require('nunjucks');
   var map = require('vinyl-map');
 
@@ -47,7 +48,7 @@ gulp.task('templates', function() {
   // disable watching or it'll hang forever
   nunjucks.configure('app', {watch: false});
 
-  var nunjuckified = map(function(code, filename) {
+  var nunjuckified = map((code, filename) => {
     return nunjucks.renderString(code.toString(), data);
   });
 
@@ -57,7 +58,7 @@ gulp.task('templates', function() {
     .pipe($.size({title: 'html'}));
 });
 
-gulp.task('images', function() {
+gulp.task('images', () => {
   return gulp.src('app/assets/images/**/*')
   .pipe($.cache($.imagemin({
     progressive: true,
@@ -67,13 +68,13 @@ gulp.task('images', function() {
   .pipe($.size({title: 'images'}));
 });
 
-gulp.task('assets', function() {
+gulp.task('assets', () => {
   return gulp.src(['app/assets/*', '!app/assets/images/'])
   .pipe(gulp.dest('dist/assets'))
   .pipe($.size({title: 'assets'}));
 });
 
-gulp.task('html', ['templates'], function() {
+gulp.task('html', ['templates'], () => {
   var assets = $.useref.assets({searchPath: ['.tmp', 'app', '.']});
 
   return gulp.src('.tmp/index.html')
@@ -89,17 +90,17 @@ gulp.task('html', ['templates'], function() {
     .pipe($.size({title: 'html'}));
 });
 
-gulp.task('clean', function(cb) {
+gulp.task('clean', (cb) => {
   return del(['.tmp/**', 'dist/**', '!dist/.git'], {dot: true}, cb);
 });
 
-gulp.task('pym', function() {
+gulp.task('pym', () => {
   return gulp.src('node_modules/pym.js/dist/pym.min.js')
     .pipe($.gzip({append: false}))
     .pipe(gulp.dest('dist/scripts/pym/'));
 });
 
-gulp.task('serve', ['styles', 'templates'], function() {
+gulp.task('serve', ['styles', 'templates'], () => {
   browserSync({
     notify: false,
     logPrefix: 'NEWSAPPS',
@@ -120,7 +121,7 @@ gulp.task('serve', ['styles', 'templates'], function() {
   gulp.watch(['app/fonts/**/*'], reload);
 });
 
-gulp.task('serve:build', ['default'], function() {
+gulp.task('serve:build', ['default'],() => {
   browserSync({
     notify: false,
     logPrefix: 'NEWSAPPS',
@@ -129,7 +130,7 @@ gulp.task('serve:build', ['default'], function() {
   });
 });
 
-gulp.task('default', ['clean'], function(cb) {
+gulp.task('default', ['clean'], (cb) => {
   runSequence('styles', ['jshint', 'html', 'images', 'assets', 'pym'], cb);
 });
 
