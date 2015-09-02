@@ -5,19 +5,21 @@ import fs from 'fs';
 
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
-import del from 'del';
-import runSequence from 'run-sequence';
+
 import browserSync from 'browser-sync';
+import del from 'del';
+import nunjucks from 'nunjucks';
+import runSequence from 'run-sequence';
+import map from 'vinyl-map';
 
 const $ = gulpLoadPlugins();
-const reload = browserSync.reload;
-const stream = browserSync.stream;
+const bs = browserSync.create();
 
 gulp.task('jshint', () => {
   return gulp.src(['app/scripts/**/*.js', '!app/scripts/libs/*'])
     .pipe($.jshint())
     .pipe($.jshint.reporter('jshint-stylish'))
-    .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
+    .pipe($.if(!bs.active, $.jshint.reporter('fail')));
 });
 
 gulp.task('styles', () => {
@@ -28,34 +30,32 @@ gulp.task('styles', () => {
     }))
     .pipe($.autoprefixer(['last 2 versions', 'IE 9', 'IE 8']))
     .pipe(gulp.dest('.tmp'))
-    .pipe(stream({match: '**/*.css'}))
-    .pipe($.if('*.css', $.csso()))
+    .pipe(bs.stream({match: '**/*.css'}))
+    .pipe($.if('*.css', $.minifyCss({
+      keepSpecialComments: 0
+    })))
     .pipe($.gzip({append: false}))
     .pipe(gulp.dest('dist'))
     .pipe($.size({title: 'styles'}));
 });
 
 gulp.task('templates', () => {
-  var nunjucks = require('nunjucks');
-  var map = require('vinyl-map');
-
-  var data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
+  let data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
 
   // pulls over the bucket and slug data for the preview page
-  var packageData = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+  let packageData = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   data.INTERNAL = packageData.config;
 
   // disable watching or it'll hang forever
-  nunjucks.configure('app', {watch: false});
+  let env = nunjucks.configure('app', {watch: false});
 
-  var nunjuckified = map((code, filename) => {
-    return nunjucks.renderString(code.toString(), data);
+  let nunjuckify = map((code, filename) => {
+    return env.renderString(code.toString(), data);
   });
 
-  return gulp.src(['app/**/{*,!_*}.html', '!app/**/_*.html'])
-    .pipe(nunjuckified)
-    .pipe(gulp.dest('.tmp'))
-    .pipe($.size({title: 'html'}));
+  return gulp.src(['./app/**/{*,!_*}.html', '!app/**/_*.html'])
+    .pipe(nunjuckify)
+    .pipe(gulp.dest('./.tmp'));
 });
 
 gulp.task('images', () => {
@@ -80,7 +80,9 @@ gulp.task('html', ['templates'], () => {
   return gulp.src('.tmp/index.html')
     .pipe(assets)
     .pipe($.if('*.js', $.uglify()))
-    .pipe($.if('*.css', $.csso()))
+    .pipe($.if('*.css', $.minifyCss({
+      keepSpecialComments: 0
+    })))
     .pipe($.rev())
     .pipe(assets.restore())
     .pipe($.useref())
@@ -101,7 +103,7 @@ gulp.task('pym', () => {
 });
 
 gulp.task('serve', ['styles', 'templates'], () => {
-  browserSync({
+  bs.init({
     notify: false,
     logPrefix: 'NEWSAPPS',
     open: false,
@@ -113,15 +115,15 @@ gulp.task('serve', ['styles', 'templates'], () => {
     }
   });
 
-  gulp.watch(['app/**/*.html'], ['templates', reload]);
-  gulp.watch(['data.json'], ['templates', reload]);
+  gulp.watch(['app/**/*.html'], ['templates', bs.reload]);
+  gulp.watch(['data.json'], ['templates', bs.reload]);
   gulp.watch(['app/styles/**/*.scss'], ['styles']);
-  gulp.watch(['app/scripts/**/*.js'], ['jshint', reload]);
-  gulp.watch(['app/images/**/*'], reload);
-  gulp.watch(['app/fonts/**/*'], reload);
+  gulp.watch(['app/scripts/**/*.js'], ['jshint', bs.reload]);
+  gulp.watch(['app/images/**/*'], bs.reload);
+  gulp.watch(['app/fonts/**/*'], bs.reload);
 });
 
-gulp.task('serve:build', ['default'],() => {
+gulp.task('serve:build', ['default'], () => {
   browserSync({
     notify: false,
     logPrefix: 'NEWSAPPS',
